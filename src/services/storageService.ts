@@ -1,12 +1,13 @@
 import { 
   INITIAL_USERS, INITIAL_COURSES, INITIAL_ENROLLMENTS, INITIAL_ASSESSMENTS, 
   INITIAL_RESULTS, INITIAL_CERTIFICATES, INITIAL_FEEDBACKS, INITIAL_MATERIALS, 
-  INITIAL_ANNOUNCEMENTS, INITIAL_NOTIFICATIONS, INITIAL_MESSAGES, INITIAL_ACTIVITY_LOGS 
+  INITIAL_ANNOUNCEMENTS, INITIAL_NOTIFICATIONS, INITIAL_MESSAGES, INITIAL_ACTIVITY_LOGS,
+  INITIAL_ACHIEVEMENTS, INITIAL_LEARNING_CONTENT
 } from '../data/seedData';
 import { 
   User, Course, Enrollment, Assessment, AssessmentResult, 
   Certificate, Feedback, Material, Announcement, Notification, 
-  Message, ActivityLog 
+  Message, ActivityLog, PlatformAchievement, LearningContent 
 } from '../types';
 
 const STORAGE_KEYS = {
@@ -22,6 +23,8 @@ const STORAGE_KEYS = {
   NOTIFICATIONS: 'capacity_connect_notifications',
   MESSAGES: 'capacity_connect_messages',
   ACTIVITY_LOGS: 'capacity_connect_activity_logs',
+  ACHIEVEMENTS: 'capacity_connect_achievements',
+  LEARNING_CONTENT: 'capacity_connect_learning_content',
   CURRENT_USER: 'capacity_connect_auth_user',
   TOKEN: 'capacity_connect_jwt_token',
 };
@@ -63,6 +66,8 @@ export const storageService = {
     getStoredData(STORAGE_KEYS.NOTIFICATIONS, INITIAL_NOTIFICATIONS);
     getStoredData(STORAGE_KEYS.MESSAGES, INITIAL_MESSAGES);
     getStoredData(STORAGE_KEYS.ACTIVITY_LOGS, INITIAL_ACTIVITY_LOGS);
+    getStoredData(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS);
+    getStoredData(STORAGE_KEYS.LEARNING_CONTENT, INITIAL_LEARNING_CONTENT);
   },
 
   // Reset demo data to pristine initial seed
@@ -79,6 +84,8 @@ export const storageService = {
     localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(INITIAL_NOTIFICATIONS));
     localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(INITIAL_MESSAGES));
     localStorage.setItem(STORAGE_KEYS.ACTIVITY_LOGS, JSON.stringify(INITIAL_ACTIVITY_LOGS));
+    localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(INITIAL_ACHIEVEMENTS));
+    localStorage.setItem(STORAGE_KEYS.LEARNING_CONTENT, JSON.stringify(INITIAL_LEARNING_CONTENT));
   },
 
   // Cloud storage upload simulation
@@ -144,12 +151,88 @@ export const storageService = {
   getActivityLogs: (): ActivityLog[] => getStoredData(STORAGE_KEYS.ACTIVITY_LOGS, INITIAL_ACTIVITY_LOGS),
   setActivityLogs: (logs: ActivityLog[]) => setStoredData(STORAGE_KEYS.ACTIVITY_LOGS, logs),
 
+  // Achievements
+  getAchievements: (): PlatformAchievement[] => getStoredData(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS),
+  setAchievements: (achievements: PlatformAchievement[]) => setStoredData(STORAGE_KEYS.ACHIEVEMENTS, achievements),
+  
+  createAchievement: (achievement: Omit<PlatformAchievement, '_id' | 'createdDate'>): PlatformAchievement => {
+    const achievements = getStoredData<PlatformAchievement[]>(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS);
+    const newEntry: PlatformAchievement = {
+      ...achievement,
+      _id: `ach-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      createdDate: new Date().toISOString()
+    };
+    achievements.unshift(newEntry);
+    setStoredData(STORAGE_KEYS.ACHIEVEMENTS, achievements);
+    return newEntry;
+  },
+
+  updateAchievement: (id: string, updates: Partial<PlatformAchievement>): PlatformAchievement | null => {
+    const achievements = getStoredData<PlatformAchievement[]>(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS);
+    const index = achievements.findIndex(a => a._id === id);
+    if (index !== -1) {
+      achievements[index] = { ...achievements[index], ...updates };
+      setStoredData(STORAGE_KEYS.ACHIEVEMENTS, achievements);
+      return achievements[index];
+    }
+    return null;
+  },
+
+  deleteAchievement: (id: string): boolean => {
+    const achievements = getStoredData<PlatformAchievement[]>(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS);
+    const filtered = achievements.filter(a => a._id !== id);
+    setStoredData(STORAGE_KEYS.ACHIEVEMENTS, filtered);
+    return filtered.length !== achievements.length;
+  },
+
+  // Homepage Learning Content & Featured Resources
+  getLearningContents: (): LearningContent[] => getStoredData(STORAGE_KEYS.LEARNING_CONTENT, INITIAL_LEARNING_CONTENT),
+  setLearningContents: (contents: LearningContent[]) => setStoredData(STORAGE_KEYS.LEARNING_CONTENT, contents),
+
+  createLearningContent: (content: Omit<LearningContent, '_id' | 'createdAt'>): LearningContent => {
+    const contents = getStoredData<LearningContent[]>(STORAGE_KEYS.LEARNING_CONTENT, INITIAL_LEARNING_CONTENT);
+    const newEntry: LearningContent = {
+      ...content,
+      _id: `lc-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      createdAt: new Date().toISOString()
+    };
+    contents.unshift(newEntry);
+    setStoredData(STORAGE_KEYS.LEARNING_CONTENT, contents);
+    return newEntry;
+  },
+
+  updateLearningContent: (id: string, updates: Partial<LearningContent>): LearningContent | null => {
+    const contents = getStoredData<LearningContent[]>(STORAGE_KEYS.LEARNING_CONTENT, INITIAL_LEARNING_CONTENT);
+    const index = contents.findIndex(c => c._id === id);
+    if (index !== -1) {
+      contents[index] = { ...contents[index], ...updates };
+      setStoredData(STORAGE_KEYS.LEARNING_CONTENT, contents);
+      return contents[index];
+    }
+    return null;
+  },
+
+  deleteLearningContent: (id: string): boolean => {
+    const contents = getStoredData<LearningContent[]>(STORAGE_KEYS.LEARNING_CONTENT, INITIAL_LEARNING_CONTENT);
+    const filtered = contents.filter(c => c._id !== id);
+    setStoredData(STORAGE_KEYS.LEARNING_CONTENT, filtered);
+    return filtered.length !== contents.length;
+  },
+
   getPortalAnalytics: () => {
     const users = getStoredData<User[]>(STORAGE_KEYS.USERS, INITIAL_USERS);
     const courses = getStoredData<Course[]>(STORAGE_KEYS.COURSES, INITIAL_COURSES);
     const enrollments = getStoredData<Enrollment[]>(STORAGE_KEYS.ENROLLMENTS, INITIAL_ENROLLMENTS);
     const certificates = getStoredData<Certificate[]>(STORAGE_KEYS.CERTIFICATES, INITIAL_CERTIFICATES);
     const assessments = getStoredData<Assessment[]>(STORAGE_KEYS.ASSESSMENTS, INITIAL_ASSESSMENTS);
+    const results = getStoredData<AssessmentResult[]>(STORAGE_KEYS.RESULTS, INITIAL_RESULTS);
+    const achievements = getStoredData<PlatformAchievement[]>(STORAGE_KEYS.ACHIEVEMENTS, INITIAL_ACHIEVEMENTS);
+
+    const completedEnrollments = enrollments.filter(e => e.status === 'completed' || e.progress >= 100);
+    const completionRate = enrollments.length > 0 ? Math.round((completedEnrollments.length / enrollments.length) * 100) : 78;
+    
+    const validScores = results.map(r => r.percentage || (r.score / (r.totalMarks || 100)) * 100).filter(s => !isNaN(s));
+    const averageScore = validScores.length > 0 ? Math.round((validScores.reduce((a, b) => a + b, 0) / validScores.length) * 10) / 10 : 85.5;
 
     return {
       totalUsers: users.length,
@@ -160,7 +243,12 @@ export const storageService = {
       draftCourses: courses.filter(c => c.status === 'draft').length,
       totalEnrollments: enrollments.length,
       totalCertificatesIssued: certificates.length,
-      totalAssessments: assessments.length
+      totalAssessments: assessments.length,
+      totalAchievements: achievements.length,
+      publishedAchievements: achievements.filter(a => a.status === 'published').length,
+      activeUsersCount: Math.round(users.length * 0.85) + 120,
+      courseCompletionRate: completionRate,
+      averageAssessmentScore: averageScore
     };
   },
 

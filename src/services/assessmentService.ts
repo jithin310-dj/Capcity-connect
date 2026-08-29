@@ -39,6 +39,11 @@ export const assessmentService = {
     }
 
     const assessments = storageService.getAssessments();
+    const questionsList = assessmentData.questions || [];
+    const totalMarks = questionsList.reduce((acc, q) => acc + (q.marks || 1), 0);
+    const passPct = assessmentData.passingPercentage || assessmentData.passingScore || 70;
+    const passingMarks = Math.ceil((totalMarks * passPct) / 100);
+
     const newAssessment: Assessment = {
       _id: `asm-${Date.now()}`,
       courseId: assessmentData.courseId || '',
@@ -47,11 +52,15 @@ export const assessmentService = {
       trainerName: tName,
       title: assessmentData.title || 'Course Competency Assessment',
       description: assessmentData.description || 'Multiple choice questionnaire assessing course learning objectives.',
-      questions: assessmentData.questions || [],
+      subject: assessmentData.subject || 'General',
+      moduleTitle: assessmentData.moduleTitle || 'Comprehensive Module',
+      totalMarks: assessmentData.totalMarks || totalMarks,
+      passingMarks: assessmentData.passingMarks || passingMarks,
+      questions: questionsList,
       durationMinutes: assessmentData.durationMinutes || 15,
       deadline: assessmentData.deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      passingScore: assessmentData.passingScore || assessmentData.passingPercentage || 70,
-      passingPercentage: assessmentData.passingPercentage || assessmentData.passingScore || 70,
+      passingScore: passPct,
+      passingPercentage: passPct,
       status: assessmentData.status || 'published',
       createdAt: new Date().toISOString()
     };

@@ -1,5 +1,6 @@
 import { storageService } from './storageService';
 import { Notification } from '../types';
+import { soundUtility } from '../utils/soundUtility';
 
 export const notificationService = {
   getNotifications(userId: string): Notification[] {
@@ -41,6 +42,7 @@ export const notificationService = {
       ...notification
     };
     storageService.setNotifications([newNotif, ...notifications]);
+    soundUtility.playNotificationSound();
     return newNotif;
   }
 };

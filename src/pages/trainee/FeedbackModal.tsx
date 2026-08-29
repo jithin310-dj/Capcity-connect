@@ -133,7 +133,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </label>
             <textarea
               rows={3}
-              value={comments}
+              value={comments || ''}
               onChange={(e) => setComments(e.target.value)}
               placeholder="What did you like most? How can this course or trainer improve?"
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"

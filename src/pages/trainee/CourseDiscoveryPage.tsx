@@ -6,7 +6,7 @@ import { useToast } from '../../context/ToastContext';
 import { CourseCard } from '../../components/common/CourseCard';
 import { EmptyState } from '../../components/common/EmptyState';
 import { Course } from '../../types';
-import { Search, Filter, SlidersHorizontal, BookOpen, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Search, Filter, SlidersHorizontal, BookOpen, CheckCircle2 } from 'lucide-react';
 
 interface CourseDiscoveryPageProps {
   onNavigate: (view: string, payload?: any) => void;
@@ -77,49 +77,49 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto w-full">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
-            <BookOpen className="w-7 h-7 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
+            <BookOpen className="w-7 h-7 text-blue-600 dark:text-blue-400 shrink-0" />
             <span>Capacity Course Catalog</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Discover and enroll in institutional courses aligned with digital competency frameworks.
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Discover and enroll in institutional courses aligned with national digital competency frameworks.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-slate-500">Showing:</span>
-          <span className="px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-xl text-xs font-bold">
+          <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Showing:</span>
+          <span className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/50 rounded-xl text-xs font-bold font-mono">
             {filteredCourses.length} Courses
           </span>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-2xs space-y-4">
+      <div className="bg-white dark:bg-[#151B28] rounded-3xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-2xs space-y-4 transition-colors">
         
         {/* Search row */}
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              value={searchQuery}
+              value={searchQuery || ''}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by title, domain skill (e.g. Python, Leadership), or trainer..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-900 dark:text-white focus:bg-white dark:focus:bg-[#0F172A] focus:outline-hidden focus:border-blue-500 transition-colors"
             />
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
             <select
-              value={sortBy}
+              value={sortBy || 'popular'}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-hidden"
+              className="min-h-[42px] px-3 py-2 bg-slate-50 dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
               <option value="popular">Most Popular</option>
               <option value="rating">Highest Rated</option>
@@ -127,9 +127,9 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
             </select>
 
             <select
-              value={selectedDifficulty}
+              value={selectedDifficulty || 'All'}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
-              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-hidden"
+              className="min-h-[42px] px-3 py-2 bg-slate-50 dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
               {difficulties.map((diff) => (
                 <option key={diff} value={diff}>
@@ -139,28 +139,28 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
             </select>
 
             <select
-              value={selectedRating}
+              value={selectedRating || 'All'}
               onChange={(e) => setSelectedRating(e.target.value)}
-              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-hidden"
+              className="min-h-[42px] px-3 py-2 bg-slate-50 dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-hidden cursor-pointer"
             >
               <option value="All">All Ratings</option>
-              <option value="4.5">★ 4.5 & Above</option>
-              <option value="4.0">★ 4.0 & Above</option>
+              <option value="4.5">★ 4.5+ Rated</option>
+              <option value="4.0">★ 4.0+ Rated</option>
             </select>
           </div>
         </div>
 
-        {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 border-t border-slate-100">
-          <span className="text-xs font-bold text-slate-400 shrink-0 mr-1">Categories:</span>
+        {/* Category Pills Row */}
+        <div className="flex items-center gap-2 overflow-x-auto pt-2 pb-1 border-t border-slate-100 dark:border-slate-800">
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 whitespace-nowrap mr-1">Categories:</span>
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all ${
+              className={`min-h-[36px] px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               {cat}
@@ -173,9 +173,9 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
       {/* Course Grid */}
       {filteredCourses.length === 0 ? (
         <EmptyState
-          title="No Courses Found"
-          description="We couldn't find any courses matching your specific search query or active filter combination."
-          actionLabel="Reset Filters"
+          title="No courses match your filter criteria"
+          description="Try clearing search keywords or resetting difficulty/category filters to view all available tracks."
+          actionText="Clear All Filters"
           onAction={() => {
             setSearchQuery('');
             setSelectedCategory('All');
@@ -184,7 +184,7 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
           }}
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => {
             const enrollment = enrollments.find((e) => e.courseId === course._id);
             return (
@@ -192,11 +192,11 @@ export const CourseDiscoveryPage: React.FC<CourseDiscoveryPageProps> = ({ onNavi
                 key={course._id}
                 course={course}
                 enrollment={enrollment}
-                onSelect={(id) => {
+                onSelect={(cId) => {
                   if (enrollment) {
-                    onNavigate('course-learning', { courseId: id });
+                    onNavigate('course-learning', { courseId: cId });
                   } else {
-                    onNavigate('course-detail', { courseId: id });
+                    handleEnroll(cId);
                   }
                 }}
                 onEnroll={handleEnroll}

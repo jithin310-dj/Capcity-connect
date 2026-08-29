@@ -1,5 +1,6 @@
 import { storageService } from './storageService';
 import { Message, UserRole } from '../types';
+import { soundUtility } from '../utils/soundUtility';
 
 export const messageService = {
   getMessagesForUser(userId: string): Message[] {
@@ -45,6 +46,7 @@ export const messageService = {
     };
 
     storageService.setMessages([...messages, newMsg]);
+    soundUtility.playMessageSound();
     return newMsg;
   },
 

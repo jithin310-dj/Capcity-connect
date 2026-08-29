@@ -9,7 +9,7 @@ import { CertificateModal } from '../../components/common/CertificateModal';
 import { 
   Play, CheckCircle2, Circle, FileText, Presentation, 
   Download, ArrowLeft, ArrowRight, BookOpen, Clock, 
-  Award, Star, HelpCircle, AlertCircle, Sparkles, MessageSquare, ShieldCheck 
+  Award, Star, HelpCircle, AlertCircle, MessageSquare, ShieldCheck 
 } from 'lucide-react';
 
 interface CourseLearningPageProps {

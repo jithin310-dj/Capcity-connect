@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 import { UserRole } from '../../types';
-import { User, Mail, Lock, Building, Briefcase, ArrowRight, GraduationCap, Sparkles, Sun, Moon } from 'lucide-react';
+import { User, Mail, Lock, Building, Briefcase, ArrowRight, GraduationCap, Sun, Moon } from 'lucide-react';
 
 interface SignupPageProps {
   onNavigate: (view: string) => void;
@@ -129,7 +129,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
               <input
                 type="text"
                 required
-                value={name}
+                value={name || ''}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Ramesh Kumar"
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -140,7 +140,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
               <input
                 type="email"
                 required
-                value={email}
+                value={email || ''}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@domain.org"
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -153,7 +153,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
             <input
               type="password"
               required
-              value={password}
+              value={password || ''}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -166,7 +166,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
               <input
                 type="text"
                 required
-                value={organization}
+                value={organization || ''}
                 onChange={(e) => setOrganization(e.target.value)}
                 placeholder="e.g. National Informatics Centre"
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -176,7 +176,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
               <label className="block text-xs font-bold text-slate-700 mb-1">Designation</label>
               <input
                 type="text"
-                value={designation}
+                value={designation || ''}
                 onChange={(e) => setDesignation(e.target.value)}
                 placeholder="e.g. Assistant Director"
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -188,7 +188,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
             <label className="block text-xs font-bold text-slate-700 mb-1">Department</label>
             <input
               type="text"
-              value={department}
+              value={department || ''}
               onChange={(e) => setDepartment(e.target.value)}
               placeholder="e.g. E-Governance & Information Tech"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -199,7 +199,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
             <label className="block text-xs font-bold text-slate-700 mb-1">Skills (comma separated)</label>
             <input
               type="text"
-              value={skillsInput}
+              value={skillsInput || ''}
               onChange={(e) => setSkillsInput(e.target.value)}
               placeholder="e.g. Python, Machine Learning, Leadership, Data Governance"
               className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
@@ -213,7 +213,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate }) => {
                 type="number"
                 min="0"
                 max="50"
-                value={yearsOfExp}
+                value={yearsOfExp ?? 1}
                 onChange={(e) => setYearsOfExp(Number(e.target.value))}
                 className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-hidden focus:border-blue-500"
               />

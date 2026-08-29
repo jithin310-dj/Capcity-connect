@@ -1,6 +1,7 @@
 import { 
   User, Course, Enrollment, Assessment, AssessmentResult, 
-  Certificate, Feedback, Notification, Announcement, Message, Material, ActivityLog 
+  Certificate, Feedback, Notification, Announcement, Message, Material, ActivityLog,
+  PlatformAchievement, LearningContent 
 } from '../types';
 
 export const INITIAL_USERS: User[] = [
@@ -2053,89 +2054,231 @@ export const INITIAL_ACTIVITY_LOGS: ActivityLog[] = [
   {
     _id: 'act-1',
     time: '2026-02-28T09:15:00.000Z',
+    timestamp: '2026-02-28T09:15:00.000Z',
     userId: 'usr-trainee-9',
     userName: 'Gaurav Kulkarni',
     userRole: 'trainee',
     action: 'Registered Account',
     entity: 'User',
     entityName: 'Gaurav Kulkarni (Transport Corp)',
+    details: 'Gaurav Kulkarni registered as Trainee (Transport Corp)',
+    category: 'auth',
     status: 'info'
   },
   {
     _id: 'act-2',
     time: '2026-02-28T08:00:00.000Z',
+    timestamp: '2026-02-28T08:00:00.000Z',
     userId: 'usr-admin-1',
     userName: 'Rajeshwar Sharma',
     userRole: 'admin',
     action: 'Published Announcement',
     entity: 'Announcement',
     entityName: 'National Digital Capacity Building Hackathon 2026 Live',
+    details: 'Broadcasted National Digital Capacity Building Hackathon 2026 Live',
+    category: 'admin',
     status: 'success'
   },
   {
     _id: 'act-3',
     time: '2026-02-27T14:20:00.000Z',
+    timestamp: '2026-02-27T14:20:00.000Z',
     userId: 'usr-trainee-1',
     userName: 'Rahul Varma',
     userRole: 'trainee',
     action: 'Completed Module',
     entity: 'Course Module',
     entityName: 'Module 3: Unsupervised Learning (ML Fundamentals)',
+    details: 'Finished video lecture and practice quiz for Module 3',
+    category: 'course',
     status: 'success'
   },
   {
     _id: 'act-4',
     time: '2026-02-27T10:00:00.000Z',
+    timestamp: '2026-02-27T10:00:00.000Z',
     userId: 'usr-admin-1',
     userName: 'Rajeshwar Sharma',
     userRole: 'admin',
     action: 'Approved User Registration',
     entity: 'User',
     entityName: 'Nisha Singhal (Approved)',
+    details: 'Approved trainee account for Nisha Singhal (Tourism & Cultural Affairs)',
+    category: 'admin',
     status: 'success'
   },
   {
     _id: 'act-5',
     time: '2026-02-26T16:00:00.000Z',
+    timestamp: '2026-02-26T16:00:00.000Z',
     userId: 'usr-trainer-1',
     userName: 'Dr. Ananya Rao',
     userRole: 'trainer',
     action: 'Uploaded Study Material',
     entity: 'Material',
     entityName: 'Pandas & NumPy Quick Reference Guide',
+    details: 'Uploaded PDF resource to central library',
+    category: 'course',
     status: 'info'
   },
   {
     _id: 'act-6',
     time: '2026-02-25T16:30:00.000Z',
+    timestamp: '2026-02-25T16:30:00.000Z',
     userId: 'usr-trainee-1',
     userName: 'Rahul Varma',
     userRole: 'trainee',
     action: 'Generated Digital Certificate',
     entity: 'Certificate',
     entityName: 'CC-2026-10045 (Python for Data Analysis)',
+    details: 'Issued official verifiable completion credential CC-2026-10045',
+    category: 'certificate',
     status: 'success'
   },
   {
     _id: 'act-7',
     time: '2026-02-25T16:25:00.000Z',
+    timestamp: '2026-02-25T16:25:00.000Z',
     userId: 'usr-trainee-1',
     userName: 'Rahul Varma',
     userRole: 'trainee',
     action: 'Submitted Assessment',
     entity: 'Assessment',
     entityName: 'Score 90% (Passed Python Assessment)',
+    details: 'Achieved 90% score on Python for Data Analysis Final Assessment',
+    category: 'assessment',
     status: 'success'
   },
   {
     _id: 'act-8',
     time: '2026-02-24T11:00:00.000Z',
+    timestamp: '2026-02-24T11:00:00.000Z',
     userId: 'usr-trainer-3',
     userName: 'Priya Sharma',
     userRole: 'trainer',
     action: 'Created Questionnaire',
     entity: 'Assessment',
     entityName: 'Enterprise Cyber Defense & Threat Mitigation Exam',
+    details: 'Configured 10-question MCQ certification assessment',
+    category: 'assessment',
     status: 'info'
   }
 ];
+
+export const INITIAL_ACHIEVEMENTS: PlatformAchievement[] = [
+  {
+    _id: 'ach-1',
+    title: 'National Digital Governance Milestone',
+    description: 'Surpassed 50,000 certified public sector officers across digital infrastructure, procurement, and data security tracks.',
+    category: 'Milestone',
+    badgeIcon: 'trophy',
+    criteria: 'Platform-wide completion benchmark of 50,000 accredited certifications issued across ministry departments.',
+    targetAudience: 'All Platform Users',
+    milestoneTarget: 50000,
+    currentProgress: 52480,
+    unit: 'Certificates',
+    recipientCount: 52480,
+    status: 'published',
+    publishedDate: '2026-02-15T10:00:00.000Z',
+    createdDate: '2026-02-15T09:30:00.000Z',
+    featured: true
+  },
+  {
+    _id: 'ach-2',
+    title: 'Top 5% Performer - Cyber & AI Vanguard',
+    description: 'Awarded to trainees scoring above 95% across both AI Governance and Enterprise Cloud Defense certification programs.',
+    category: 'Top Performer',
+    badgeIcon: 'shield',
+    criteria: 'Minimum 95% aggregate assessment score and 100% attendance in Cyber Security and AI curricula.',
+    targetAudience: 'Trainees',
+    milestoneTarget: 500,
+    currentProgress: 342,
+    unit: 'Officers',
+    recipientCount: 342,
+    status: 'published',
+    publishedDate: '2026-02-20T14:30:00.000Z',
+    createdDate: '2026-02-20T12:00:00.000Z',
+    featured: true
+  },
+  {
+    _id: 'ach-3',
+    title: 'Distinguished Faculty Excellence Badge',
+    description: 'Honoring trainers maintaining an average faculty feedback score >4.85 across more than 100 trainee reviews.',
+    category: 'Excellence',
+    badgeIcon: 'star',
+    criteria: 'Average student feedback rating of >= 4.85 stars with minimum 100 verified trainee evaluations.',
+    targetAudience: 'Trainers',
+    milestoneTarget: 50,
+    currentProgress: 28,
+    unit: 'Trainers',
+    recipientCount: 28,
+    status: 'published',
+    publishedDate: '2026-02-10T11:15:00.000Z',
+    createdDate: '2026-02-10T10:00:00.000Z',
+    featured: true
+  },
+  {
+    _id: 'ach-4',
+    title: '100k Course Modules Completed',
+    description: 'Platform milestone honoring the completion of over one hundred thousand training modules nationwide.',
+    category: 'Milestone',
+    badgeIcon: 'zap',
+    criteria: 'Total aggregate module completions tracked across all enrolled institutional users.',
+    targetAudience: 'All Platform Users',
+    milestoneTarget: 100000,
+    currentProgress: 114500,
+    unit: 'Modules',
+    recipientCount: 114500,
+    status: 'published',
+    publishedDate: '2026-02-22T09:00:00.000Z',
+    createdDate: '2026-02-22T08:00:00.000Z',
+    featured: false
+  }
+];
+
+export const INITIAL_LEARNING_CONTENT: LearningContent[] = [
+  {
+    _id: 'lc-1',
+    title: 'National AI & Governance Framework Guidelines 2026',
+    description: 'Comprehensive regulatory blueprint detailing ethical AI implementation, data privacy, and algorithm transparency across government institutions.',
+    category: 'AI & Policy',
+    resourceLink: 'https://niti.gov.in/sites/default/files/2023-03/National-Strategy-for-AI-Discussion-Paper.pdf',
+    thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80',
+    featured: true,
+    published: true,
+    contentType: 'policy-brief',
+    readTime: '12 min read',
+    createdAt: '2026-02-18T10:00:00.000Z',
+    authorName: 'National Capacity Building Commission'
+  },
+  {
+    _id: 'lc-2',
+    title: 'Enterprise Cyber Resilience Playbook for Public Sector',
+    description: 'Standard operating protocols for zero-trust architecture, incident mitigation, vulnerability disclosures, and critical infrastructure hardening.',
+    category: 'Cybersecurity',
+    resourceLink: 'https://www.cert-in.org.in/',
+    thumbnail: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&auto=format&fit=crop&q=80',
+    featured: true,
+    published: true,
+    contentType: 'handbook',
+    readTime: '20 min read',
+    createdAt: '2026-02-20T14:30:00.000Z',
+    authorName: 'Dr. Vikramaditya Sen'
+  },
+  {
+    _id: 'lc-3',
+    title: 'Modern Public Procurement & GeM Masterclass Primer',
+    description: 'Practical guide to transparent digital tendering, vendor evaluation, contract compliance, and reverse auctions on the Government e-Marketplace.',
+    category: 'Public Administration',
+    resourceLink: 'https://gem.gov.in/',
+    thumbnail: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop&q=80',
+    featured: true,
+    published: true,
+    contentType: 'article',
+    readTime: '8 min read',
+    createdAt: '2026-02-24T09:15:00.000Z',
+    authorName: 'Meenakshi Sundaram'
+  }
+];
+
+

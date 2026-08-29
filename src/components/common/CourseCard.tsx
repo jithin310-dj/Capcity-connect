@@ -125,23 +125,23 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, enrollment, onSe
             {isEnrolled ? (
               <button
                 onClick={() => onSelect(course._id)}
-                className="w-full py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="w-full min-h-[44px] sm:min-h-[40px] py-2.5 px-3.5 rounded-xl bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
                 <span>{isCompleted ? 'REVIEW MODULES' : 'CONTINUE LEARNING'}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4 shrink-0" />
               </button>
             ) : onEnroll ? (
               <button
                 onClick={() => onEnroll(course._id)}
-                className="w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors shadow-xs cursor-pointer"
+                className="w-full min-h-[44px] sm:min-h-[40px] py-2.5 px-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors shadow-xs cursor-pointer"
               >
                 <span>ENROLL NOW</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4 shrink-0" />
               </button>
             ) : (
               <button
                 onClick={() => onSelect(course._id)}
-                className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="w-full min-h-[44px] sm:min-h-[40px] py-2.5 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
                 <span>VIEW DETAILS</span>
               </button>

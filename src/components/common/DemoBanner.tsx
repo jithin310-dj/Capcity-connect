@@ -4,7 +4,7 @@ import { useToast } from '../../context/ToastContext';
 import { useModal } from '../../context/ModalContext';
 import { storageService } from '../../services/storageService';
 import { UserRole } from '../../types';
-import { Sparkles, Shield, User, GraduationCap, RotateCcw, BookOpen, Info } from 'lucide-react';
+import { Shield, User, GraduationCap, RotateCcw, BookOpen, Info } from 'lucide-react';
 
 interface DemoBannerProps {
   currentView: string;
@@ -32,7 +32,7 @@ export const DemoBanner: React.FC<DemoBannerProps> = ({ onNavigate }) => {
   const handleReset = () => {
     confirmAction({
       title: 'Reset All Demo Data?',
-      message: 'This will reset all courses, enrollments, assessments, certificates, logs, and users back to the pristine Smart India Hackathon initial seed dataset.',
+      message: 'This will reset all courses, enrollments, assessments, certificates, logs, and users back to the pristine default seed dataset.',
       isDestructive: true,
       confirmText: 'Reset Demo Data',
       onConfirm: () => {
@@ -54,7 +54,7 @@ export const DemoBanner: React.FC<DemoBannerProps> = ({ onNavigate }) => {
       <div className="bg-slate-100 dark:bg-[#0F172A] text-slate-700 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 text-xs px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2.5 font-mono">
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-mono text-[10px] font-bold border border-blue-200 dark:border-blue-500/30">
-            <Sparkles className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+            <Shield className="w-3 h-3 text-blue-600 dark:text-blue-400" />
             <span>SIH 2026 PROTOTYPE</span>
           </span>
           <span className="hidden sm:inline text-slate-600 dark:text-slate-400 text-[11px]">
@@ -132,7 +132,7 @@ export const DemoBanner: React.FC<DemoBannerProps> = ({ onNavigate }) => {
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-600/20 border border-blue-200 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
-                  <Sparkles className="w-4 h-4" />
+                  <BookOpen className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wide">SIH 2026 End-to-End Evaluation Guide</h3>

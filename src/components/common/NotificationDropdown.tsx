@@ -49,16 +49,16 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
   };
 
   return (
-    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#151B28] rounded border border-slate-800 py-1 z-50 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150 text-slate-300 font-sans">
-      <div className="px-3 py-2 border-b border-slate-800 flex items-center justify-between bg-[#0F172A]">
+    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-[#151B28] rounded-2xl border border-slate-200 dark:border-slate-800 py-1 z-50 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150 text-slate-700 dark:text-slate-300 font-sans">
+      <div className="px-3.5 py-2.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-[#0F172A] rounded-t-2xl">
         <div className="flex items-center gap-1.5 font-mono">
-          <Bell className="w-3.5 h-3.5 text-slate-400" />
-          <h4 className="text-xs font-bold text-white uppercase tracking-wider">EVENT FEED</h4>
+          <Bell className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+          <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">EVENT FEED</h4>
         </div>
         {notifications.some((n) => !n.read) && (
           <button
             onClick={handleMarkAllRead}
-            className="text-[10px] font-mono font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1"
+            className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1 cursor-pointer"
           >
             <Check className="w-3 h-3" />
             CLEAR ALL
@@ -66,10 +66,10 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
         )}
       </div>
 
-      <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/50">
+      <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/50">
         {notifications.length === 0 ? (
-          <div className="text-center py-6 text-slate-500 text-xs font-mono">
-            <Bell className="w-6 h-6 mx-auto text-slate-600 mb-1.5 opacity-50" />
+          <div className="text-center py-8 text-slate-500 dark:text-slate-400 text-xs font-mono">
+            <Bell className="w-6 h-6 mx-auto text-slate-400 dark:text-slate-600 mb-1.5 opacity-50" />
             <p>NO NEW EVENTS</p>
           </div>
         ) : (
@@ -77,26 +77,26 @@ export const NotificationDropdown: React.FC<NotificationDropdownProps> = ({ onCl
             <div
               key={notif._id}
               onClick={() => handleNotificationClick(notif)}
-              className={`p-2.5 flex items-start gap-2.5 hover:bg-slate-800/80 cursor-pointer transition-colors ${
-                !notif.read ? 'bg-blue-500/5' : ''
+              className={`p-3 flex items-start gap-2.5 hover:bg-slate-50 dark:hover:bg-slate-800/80 cursor-pointer transition-colors ${
+                !notif.read ? 'bg-blue-50/60 dark:bg-blue-500/10' : ''
               }`}
             >
-              <div className="p-1.5 rounded bg-[#0B0F19] border border-slate-800 shrink-0 mt-0.5">
+              <div className="p-1.5 rounded-xl bg-slate-100 dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-800 shrink-0 mt-0.5">
                 {getIcon(notif.type)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <p className={`text-xs font-mono ${!notif.read ? 'font-bold text-white' : 'text-slate-300'} truncate`}>
+                  <p className={`text-xs font-mono ${!notif.read ? 'font-bold text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'} truncate`}>
                     {notif.title}
                   </p>
                   {!notif.read && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
                   )}
                 </div>
-                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                   {notif.message}
                 </p>
-                <span className="text-[9px] font-mono text-slate-500 mt-1 block flex items-center gap-1">
+                <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
                   <Clock className="w-2.5 h-2.5" />
                   {new Date(notif.createdAt).toLocaleDateString()}
                 </span>

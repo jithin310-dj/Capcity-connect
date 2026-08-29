@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, useState, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -10,12 +10,46 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const applyThemeToDOM = (activeTheme: Theme) => {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  const body = document.body;
+
+  if (activeTheme === 'dark') {
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.setAttribute('data-theme', 'dark');
+    root.style.colorScheme = 'dark';
+    if (body) {
+      body.classList.add('dark');
+      body.classList.remove('light');
+    }
+  } else {
+    root.classList.add('light');
+    root.classList.remove('dark');
+    root.setAttribute('data-theme', 'light');
+    root.style.colorScheme = 'light';
+    if (body) {
+      body.classList.add('light');
+      body.classList.remove('dark');
+    }
+  }
+};
+
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     try {
-      const saved = localStorage.getItem('cc_theme');
-      if (saved === 'light' || saved === 'dark') {
-        return saved;
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('cc_theme');
+        if (saved === 'light' || saved === 'dark') {
+          applyThemeToDOM(saved);
+          return saved;
+        }
+        // Check document attribute if already set by index.html script
+        const existingDataTheme = document.documentElement.getAttribute('data-theme');
+        if (existingDataTheme === 'light' || existingDataTheme === 'dark') {
+          return existingDataTheme;
+        }
       }
     } catch {
       // ignore
@@ -23,20 +57,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return 'dark'; // default theme
   });
 
-  const applyThemeToDOM = (activeTheme: Theme) => {
-    const root = document.documentElement;
-    if (activeTheme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
-      root.setAttribute('data-theme', 'dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.add('light');
-      root.classList.remove('dark');
-      root.setAttribute('data-theme', 'light');
-      root.style.colorScheme = 'light';
-    }
-  };
+  useLayoutEffect(() => {
+    applyThemeToDOM(theme);
+  }, [theme]);
 
   useEffect(() => {
     applyThemeToDOM(theme);
@@ -52,6 +75,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'cc_theme' && (e.newValue === 'light' || e.newValue === 'dark')) {
         setThemeState(e.newValue);
+        applyThemeToDOM(e.newValue);
       }
     };
     window.addEventListener('storage', handleStorage);
@@ -59,10 +83,15 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, []);
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    setThemeState((prev) => {
+      const nextTheme = prev === 'dark' ? 'light' : 'dark';
+      applyThemeToDOM(nextTheme);
+      return nextTheme;
+    });
   };
 
   const setTheme = (newTheme: Theme) => {
+    applyThemeToDOM(newTheme);
     setThemeState(newTheme);
   };
 

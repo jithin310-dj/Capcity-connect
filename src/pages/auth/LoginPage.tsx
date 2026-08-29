@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 import { UserRole } from '../../types';
-import { Lock, Mail, ArrowRight, User, Shield, GraduationCap, Sparkles, CheckCircle2, Sun, Moon } from 'lucide-react';
+import { Lock, Mail, ArrowRight, User, Shield, GraduationCap, ShieldCheck, CheckCircle2, Sun, Moon } from 'lucide-react';
 
 interface LoginPageProps {
   onNavigate: (view: string) => void;
@@ -70,11 +70,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
           <p className="text-xs text-slate-500 mt-1">CAPACITY CONNECT • Digital Learning Management</p>
         </div>
 
-        {/* Demo Quick Logins for Hackathon Judges */}
+        {/* Quick Role Logins */}
         <div className="mb-6 bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80">
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 mb-2">
-            <Sparkles className="w-4 h-4 text-blue-600" />
-            <span>SIH 2026 1-Click Demo Logins</span>
+            <ShieldCheck className="w-4 h-4 text-blue-600" />
+            <span>1-Click Role Access</span>
           </div>
           <div className="grid grid-cols-3 gap-2">
             <button
@@ -113,7 +113,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               <input
                 type="email"
                 required
-                value={email}
+                value={email || ''}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@domain.org"
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-hidden focus:border-blue-500 transition-colors"
@@ -131,7 +131,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
               <input
                 type="password"
                 required
-                value={password}
+                value={password || ''}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-hidden focus:border-blue-500 transition-colors"

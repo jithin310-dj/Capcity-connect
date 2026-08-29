@@ -46,7 +46,7 @@ export const materialService = {
       moduleTitle: materialData.moduleTitle || 'Supplementary Resource',
       skill: materialData.skill || 'General',
       fileType: materialData.fileType || 'pdf',
-      fileUrl: materialData.fileUrl || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+      fileUrl: materialData.fileUrl || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/sample.pdf',
       fileSize: materialData.fileSize || '2.5 MB',
       downloadsCount: 0,
       createdAt: new Date().toISOString()
@@ -99,5 +99,15 @@ export const materialService = {
       target.title,
       'warning'
     );
+  },
+
+  updateMaterial(materialId: string, updates: Partial<Material>): Material | null {
+    const materials = storageService.getMaterials();
+    const idx = materials.findIndex((m) => m._id === materialId);
+    if (idx === -1) return null;
+    const updated = { ...materials[idx], ...updates };
+    materials[idx] = updated;
+    storageService.setMaterials(materials);
+    return updated;
   }
 };

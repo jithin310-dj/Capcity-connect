@@ -19,6 +19,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, isOpe
   const { user, role } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
+  const handleNavClick = (viewId: string) => {
+    onNavigate(viewId);
+    onClose();
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   const traineeLinks = [
     { id: 'trainee-dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'trainee-courses', label: 'My Learning', icon: BookOpen },
@@ -101,27 +107,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, isOpe
         }`}
       >
         {/* Top Header */}
-        <div className="p-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-[#0F172A]">
+        <div className="p-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-[#0F172A]">
           <div 
             onClick={() => {
-              onNavigate(role === 'admin' ? 'admin-dashboard' : role === 'trainer' ? 'trainer-dashboard' : 'trainee-dashboard');
-              onClose();
+              handleNavClick(role === 'admin' ? 'admin-dashboard' : role === 'trainer' ? 'trainer-dashboard' : 'trainee-dashboard');
             }}
-            className="flex items-center gap-2 cursor-pointer group"
+            className="flex items-center gap-2.5 cursor-pointer group py-1"
           >
-            <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-xs group-hover:bg-blue-500 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-xs group-hover:bg-blue-500 transition-colors shrink-0">
               CC
             </div>
             <div>
               <h2 className="font-bold text-slate-900 dark:text-white text-xs leading-none tracking-tight">CAPACITY CONNECT</h2>
-              <span className={`text-[9px] font-mono uppercase tracking-wider px-1 py-0.2 rounded border inline-block mt-0.5 ${roleTheme.color}`}>
+              <span className={`text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border inline-block mt-1 ${roleTheme.color}`}>
                 {roleTheme.badge}
               </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+            className="lg:hidden min-h-[44px] min-w-[44px] p-2.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors flex items-center justify-center cursor-pointer"
             title="Close menu"
             aria-label="Close menu"
           >
@@ -130,8 +135,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, isOpe
         </div>
 
         {/* Navigation items list */}
-        <div className="flex-1 overflow-y-auto px-2 py-3 space-y-0.5">
-          <p className="px-2.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-mono mb-1.5">
+        <div className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+          <p className="px-3 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-mono mb-2">
             // NAVIGATION
           </p>
           {links.map((item) => {
@@ -140,23 +145,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, isOpe
             return (
               <button
                 key={item.id}
-                onClick={() => {
-                  onNavigate(item.id);
-                  onClose();
-                }}
-                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium transition-all ${
+                onClick={() => handleNavClick(item.id)}
+                className={`w-full min-h-[44px] sm:min-h-[40px] flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   isActive
                     ? roleTheme.activeItem
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#151B28]/70'
                 }`}
               >
-                <div className="flex items-center gap-2 truncate">
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
-                  <span className="truncate text-[11px] font-medium">{item.label}</span>
+                <div className="flex items-center gap-2.5 truncate">
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                  <span className="truncate text-xs font-medium">{item.label}</span>
                 </div>
                 {item.badge && (
                   <span
-                    className={`text-[9px] font-mono font-bold px-1.5 py-0.2 rounded border ${
+                    className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border ${
                       isActive
                         ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-500/40'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
@@ -171,39 +173,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate, isOpe
         </div>
 
         {/* Bottom User Card & Theme Switcher in Sidebar */}
-        <div className="p-2 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0F172A] space-y-2">
+        <div className="p-2.5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0F172A] space-y-2">
           {/* Quick Theme Switcher */}
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#151B28] border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition-all font-mono shadow-2xs"
+            className="w-full min-h-[44px] sm:min-h-[40px] flex items-center justify-between px-3 py-2 rounded-xl bg-white dark:bg-[#151B28] border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition-all font-mono shadow-2xs cursor-pointer"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               {theme === 'dark' ? (
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <Sun className="w-4 h-4 text-amber-400 shrink-0" />
               ) : (
-                <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                <Moon className="w-4 h-4 text-indigo-600 shrink-0" />
               )}
-              <span className="text-[11px] font-medium">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+              <span className="text-xs font-medium">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
             </div>
-            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">
               Switch
             </span>
           </button>
 
           {user && (
             <button
-              onClick={() => {
-                onNavigate(`${role}-profile`);
-                onClose();
-              }}
-              className="w-full text-left flex items-center gap-2 p-1.5 rounded-lg bg-white dark:bg-[#151B28] border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all group shadow-2xs"
+              onClick={() => handleNavClick(`${role}-profile`)}
+              className="w-full min-h-[48px] text-left flex items-center gap-2.5 p-2 rounded-xl bg-white dark:bg-[#151B28] border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all group shadow-2xs cursor-pointer"
               title="View profile & settings"
             >
               <img
                 src={user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80'}
                 alt={user.name}
-                className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-slate-300 dark:ring-slate-700 group-hover:ring-blue-500 transition-colors"
+                className="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-slate-300 dark:ring-slate-700 group-hover:ring-blue-500 transition-colors"
               />
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate leading-tight transition-colors">{user.name}</p>

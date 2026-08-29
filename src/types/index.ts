@@ -1,6 +1,15 @@
 export type UserRole = 'trainee' | 'trainer' | 'admin';
 export type UserStatus = 'pending' | 'active' | 'approved' | 'suspended';
 
+export type SkillProficiency = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+
+export interface SkillRecord {
+  id?: string;
+  name: string;
+  category: string;
+  proficiency: SkillProficiency;
+}
+
 export interface Qualification {
   degree: string;
   institution: string;
@@ -10,8 +19,14 @@ export interface Qualification {
 export interface WorkExperience {
   organization: string;
   role: string;
+  designation?: string;
   duration: string;
   description: string;
+  startDate?: string;
+  endDate?: string;
+  currentlyWorking?: boolean;
+  responsibilities?: string;
+  yearsOfExperience?: number;
 }
 
 export interface UserCertificate {
@@ -19,6 +34,41 @@ export interface UserCertificate {
   issuingOrganization: string;
   date: string;
   credentialId: string;
+  expiryDate?: string;
+  credentialUrl?: string;
+}
+
+export interface PlatformAchievement {
+  _id: string;
+  title: string;
+  description: string;
+  category: 'Milestone' | 'Top Performer' | 'Institutional Badge' | 'Excellence' | 'Special Honor';
+  badgeIcon: 'trophy' | 'award' | 'star' | 'zap' | 'shield' | 'flame' | 'gem' | 'crown' | 'target' | 'medal';
+  criteria: string;
+  targetAudience: 'All Platform Users' | 'Trainees' | 'Trainers' | 'Top Performers';
+  milestoneTarget?: number;
+  currentProgress?: number;
+  unit?: string;
+  recipientCount: number;
+  status: 'published' | 'draft';
+  publishedDate: string;
+  createdDate: string;
+  featured?: boolean;
+}
+
+export interface LearningContent {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  resourceLink?: string;
+  thumbnail?: string;
+  featured: boolean;
+  published: boolean;
+  contentType: 'article' | 'video' | 'handbook' | 'interactive' | 'policy-brief';
+  readTime?: string;
+  createdAt: string;
+  authorName?: string;
 }
 
 export interface User {
@@ -34,6 +84,7 @@ export interface User {
   avatar: string;
   qualifications: Qualification[];
   skills: string[];
+  skillRecords?: SkillRecord[];
   interests: string[];
   experience: WorkExperience[];
   certificates: UserCertificate[];
@@ -123,6 +174,10 @@ export interface Assessment {
   trainerName?: string;
   title: string;
   description: string;
+  subject?: string;
+  moduleTitle?: string;
+  totalMarks?: number;
+  passingMarks?: number;
   questions: AssessmentQuestion[];
   durationMinutes: number;
   deadline: string;

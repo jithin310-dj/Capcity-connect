@@ -7,6 +7,7 @@ import { DemoBanner } from './components/common/DemoBanner';
 import { Header } from './components/common/Header';
 import { Sidebar } from './components/common/Sidebar';
 import { GlobalSearchModal } from './components/common/GlobalSearchModal';
+import { ShieldAlert } from 'lucide-react';
 
 // Public Pages
 import { LandingPage } from './pages/public/LandingPage';
@@ -31,6 +32,7 @@ import { TrainerQuestionnaireBuilderPage } from './pages/trainer/TrainerQuestion
 import { TrainerLibraryPage } from './pages/trainer/TrainerLibraryPage';
 import { TrainerLearnersPage } from './pages/trainer/TrainerLearnersPage';
 import { TrainerFeedbackPage } from './pages/trainer/TrainerFeedbackPage';
+import { TrainerProfilePage } from './pages/trainer/TrainerProfilePage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -100,6 +102,80 @@ const AppContent: React.FC = () => {
   const isPublicPage = ['landing', 'login', 'signup', 'verify-certificate'].includes(currentView);
 
   const renderView = () => {
+    // 1. Role Security Guards: Check unauthorized direct URL/navigation access
+    if (!isPublicPage && !user) {
+      return (
+        <div className="max-w-md mx-auto py-16 px-4 text-center">
+          <div className="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">Authentication Required</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 mb-6">
+            Please log in or register an account to access the CAPACITY CONNECT learning portal.
+          </p>
+          <div className="flex justify-center gap-3">
+            <button
+              onClick={() => handleNavigate('login')}
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs"
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => handleNavigate('signup')}
+              className="px-5 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl hover:bg-slate-300"
+            >
+              Register
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (currentView.startsWith('admin-') && user?.role !== 'admin') {
+      return (
+        <div className="max-w-lg mx-auto py-16 px-4 text-center">
+          <div className="w-16 h-16 rounded-3xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20 flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Access Restricted</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 mb-6">
+            This module requires <strong>Administrator</strong> privileges. Your active profile is configured as <strong>{user?.role?.toUpperCase()}</strong>.
+          </p>
+          <button
+            onClick={() => handleNavigate(user?.role === 'trainer' ? 'trainer-dashboard' : 'trainee-dashboard')}
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs"
+          >
+            Return to Authorized Workspace
+          </button>
+        </div>
+      );
+    }
+
+    if (
+      (currentView === 'trainer-create-course' ||
+       currentView === 'trainer-questionnaires' ||
+       currentView === 'trainer-learners') &&
+      user?.role === 'trainee'
+    ) {
+      return (
+        <div className="max-w-lg mx-auto py-16 px-4 text-center">
+          <div className="w-16 h-16 rounded-3xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Trainer Access Only</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 mb-6">
+            Course authoring, learner oversight, and questionnaire building are reserved for faculty trainers.
+          </p>
+          <button
+            onClick={() => handleNavigate('trainee-dashboard')}
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs"
+          >
+            Return to Trainee Dashboard
+          </button>
+        </div>
+      );
+    }
+
     switch (currentView) {
       // Public Views
       case 'landing':
@@ -134,6 +210,12 @@ const AppContent: React.FC = () => {
           />
         );
       case 'trainee-assessments':
+        return (
+          <AssessmentPage
+            assessmentId={navigationPayload?.assessmentId || 'directory'}
+            onNavigate={handleNavigate}
+          />
+        );
       case 'trainee-assessment-take':
         return (
           <AssessmentPage
@@ -168,6 +250,9 @@ const AppContent: React.FC = () => {
       case 'trainer-questionnaires':
         return <TrainerQuestionnaireBuilderPage onNavigate={handleNavigate} />;
       case 'trainer-library':
+      case 'library':
+      case 'trainer-materials':
+      case 'materials':
         return <TrainerLibraryPage onNavigate={handleNavigate} />;
       case 'trainer-learners':
         return <TrainerLearnersPage onNavigate={handleNavigate} />;
@@ -179,7 +264,7 @@ const AppContent: React.FC = () => {
         return <TraineeTrainerMatchingPage initialQuery={navigationPayload?.query} onNavigate={handleNavigate} />;
       case 'trainer-profile':
       case 'trainer-settings':
-        return <TraineeProfilePage />;
+        return <TrainerProfilePage onNavigate={handleNavigate} />;
 
       // Admin Views
       case 'admin-dashboard':
@@ -274,7 +359,6 @@ const AppContent: React.FC = () => {
         onClose={() => setIsSearchOpen(false)}
         onNavigate={handleNavigate}
       />
-
     </div>
   );
 };

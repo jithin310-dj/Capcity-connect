@@ -6,7 +6,7 @@ import { storageService } from '../../services/storageService';
 import { Course, CourseModule } from '../../types';
 import { 
   BookOpen, Plus, Trash2, Video, Presentation, 
-  FileText, HelpCircle, Save, ArrowLeft, Sparkles, CheckCircle2 
+  FileText, HelpCircle, Save, ArrowLeft, CheckCircle2 
 } from 'lucide-react';
 
 interface TrainerCreateCoursePageProps {
@@ -31,14 +31,16 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
 
   const [modules, setModules] = useState<CourseModule[]>([
     {
-      _id: 'm-temp-1',
+      _id: 'm-mod-1',
+      id: 'm-mod-1',
       title: 'Module 1: Foundations & Architecture Overview',
       type: 'video',
       duration: '45 mins',
       content: 'Detailed video lecture on fundamental architecture patterns, data flow mechanisms, and scalable framework standards.'
     },
     {
-      _id: 'm-temp-2',
+      _id: 'm-mod-2',
+      id: 'm-mod-2',
       title: 'Module 2: Practical Implementation Guide & Walkthrough',
       type: 'presentation',
       duration: '60 mins',
@@ -50,17 +52,27 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
     if (editCourseId) {
       const existing = storageService.getCourses().find((c) => c._id === editCourseId);
       if (existing) {
-        setTitle(existing.title);
-        setDescription(existing.description);
-        setCategory(existing.category);
-        setDifficulty(existing.difficulty);
-        setDuration(existing.duration);
-        setThumbnail(existing.thumbnail);
-        setSkillsInput(existing.skills.join(', '));
-        setTargetAudience(existing.targetAudience);
-        setPrerequisites(existing.prerequisites);
-        setStatus(existing.status);
-        setModules(existing.modules || []);
+        setTitle(existing.title || '');
+        setDescription(existing.description || '');
+        setCategory(existing.category || 'Data Science & AI');
+        setDifficulty(existing.difficulty || 'Intermediate');
+        setDuration(existing.duration || '8 Hours');
+        setThumbnail(existing.thumbnail || '');
+        setSkillsInput(existing.skills ? existing.skills.join(', ') : '');
+        setTargetAudience(existing.targetAudience || '');
+        setPrerequisites(Array.isArray(existing.prerequisites) ? existing.prerequisites.join(', ') : existing.prerequisites || '');
+        setStatus(existing.status || 'published');
+        setModules((existing.modules || []).map((m, idx) => ({
+          ...m,
+          id: m.id || m._id || `m-${idx + 1}`,
+          _id: m._id || m.id || `m-${idx + 1}`,
+          title: m.title || '',
+          content: m.content || m.textContent || m.description || '',
+          textContent: m.textContent || m.content || m.description || '',
+          type: m.type || 'video',
+          order: m.order || idx + 1,
+          durationMinutes: m.durationMinutes || 45
+        })));
       }
     }
   }, [editCourseId]);
@@ -68,11 +80,13 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
   const handleAddModule = () => {
     const newMod: CourseModule = {
       id: `m-${Date.now()}`,
+      _id: `m-${Date.now()}`,
       title: `Module ${modules.length + 1}: Key Topic & Practice`,
       description: 'Comprehensive topic coverage and practical instruction notes.',
       durationMinutes: 45,
       type: 'video',
       order: modules.length + 1,
+      content: 'Comprehensive topic coverage and practical instruction notes.',
       textContent: 'Comprehensive topic coverage and practical instruction notes.'
     };
     setModules([...modules, newMod]);
@@ -314,7 +328,7 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
                     <label className="block text-[11px] font-bold text-slate-700 mb-1">Module Title</label>
                     <input
                       type="text"
-                      value={mod.title}
+                      value={mod.title || ''}
                       onChange={(e) => handleUpdateModule(idx, { title: e.target.value })}
                       className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-emerald-500"
                     />
@@ -323,7 +337,7 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
                   <div>
                     <label className="block text-[11px] font-bold text-slate-700 mb-1">Media Type</label>
                     <select
-                      value={mod.type}
+                      value={mod.type || 'video'}
                       onChange={(e) => handleUpdateModule(idx, { type: e.target.value as any })}
                       className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-emerald-500"
                     >
@@ -338,8 +352,8 @@ export const TrainerCreateCoursePage: React.FC<TrainerCreateCoursePageProps> = (
                   <label className="block text-[11px] font-bold text-slate-700 mb-1">Content Notes & Syllabus Details</label>
                   <textarea
                     rows={2}
-                    value={mod.content}
-                    onChange={(e) => handleUpdateModule(idx, { content: e.target.value })}
+                    value={mod.content ?? mod.textContent ?? ''}
+                    onChange={(e) => handleUpdateModule(idx, { content: e.target.value, textContent: e.target.value })}
                     className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-hidden focus:border-emerald-500"
                   />
                 </div>
