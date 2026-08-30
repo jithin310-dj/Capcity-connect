@@ -49,11 +49,31 @@ import { NotificationsPage } from './pages/common/NotificationsPage';
 
 const AppContent: React.FC = () => {
   const { user } = useAuth();
-  const [currentView, setCurrentView] = useState<string>('landing');
+  const parseInitialView = (): string => {
+    if (typeof window === 'undefined') return 'landing';
+    const path = window.location.pathname.replace(/^\/+/, '').trim();
+    const hash = window.location.hash.replace(/^#\/?/, '').trim();
+    const target = path || hash;
+    return target ? target : 'landing';
+  };
+
+  const [currentView, setCurrentView] = useState<string>(parseInitialView);
   const [navigationPayload, setNavigationPayload] = useState<any>(null);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const mainScrollRef = React.useRef<HTMLDivElement>(null);
+
+  // Sync with browser popstate
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.replace(/^\/+/, '').trim();
+      const hash = window.location.hash.replace(/^#\/?/, '').trim();
+      const target = path || hash || (user ? `${user.role}-dashboard` : 'landing');
+      setCurrentView(target);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [user]);
 
   // Scroll to top helper
   const scrollToTop = () => {
@@ -96,6 +116,13 @@ const AppContent: React.FC = () => {
     setCurrentView(view);
     setNavigationPayload(payload || null);
     setIsMobileSidebarOpen(false);
+    try {
+      if (typeof window !== 'undefined' && window.history) {
+        window.history.pushState({}, '', view === 'landing' ? '/' : `/${view}`);
+      }
+    } catch {
+      // Safe fallback in sandboxed iframes
+    }
     scrollToTop();
   };
 
@@ -152,9 +179,7 @@ const AppContent: React.FC = () => {
     }
 
     if (
-      (currentView === 'trainer-create-course' ||
-       currentView === 'trainer-questionnaires' ||
-       currentView === 'trainer-learners') &&
+      currentView.startsWith('trainer-') &&
       user?.role === 'trainee'
     ) {
       return (
@@ -164,7 +189,7 @@ const AppContent: React.FC = () => {
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Trainer Access Only</h2>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 mb-6">
-            Course authoring, learner oversight, and questionnaire building are reserved for faculty trainers.
+            Course authoring, library management, learner oversight, and questionnaire building are reserved for faculty trainers.
           </p>
           <button
             onClick={() => handleNavigate('trainee-dashboard')}
